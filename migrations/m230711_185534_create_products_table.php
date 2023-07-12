@@ -3,16 +3,16 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%product}}`.
+ * Handles the creation of table `{{%products}}`.
  */
-class m230711_185534_create_product_table extends Migration
+class m230711_185534_create_products_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%product}}', [
+        $this->createTable('{{%products}}', [
             'id' => $this->primaryKey(),
             'sku' => $this->string(32)->notNull(),
             'name' => $this->string(32)->notNull(),
@@ -21,10 +21,10 @@ class m230711_185534_create_product_table extends Migration
         ]);
 
         $this->addForeignKey(
-          'fk-product-type_id',
-          'product',
+          'fk-products-type_id',
+          'products',
           'type_id',
-          'type',
+          'types',
           'id',
           'RESTRICT',
           'CASCADE'
@@ -36,6 +36,6 @@ class m230711_185534_create_product_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%product}}');
+        $this->dropTable('{{%products}}');
     }
 }

@@ -3,26 +3,26 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%image}}`.
+ * Handles the creation of table `{{%images}}`.
  */
-class m230712_100434_create_image_table extends Migration
+class m230712_100434_create_images_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%image}}', [
+        $this->createTable('{{%images}}', [
             'id' => $this->primaryKey(),
             'body' => $this->binary()->notNull(),
             'product_id' => $this->integer()->notNull(),
         ]);
 
         $this->addForeignKey(
-          'fk-image-product_id',
-          'image',
+          'fk-images-product_id',
+          'images',
           'product_id',
-          'product',
+          'products',
           'id',
           'CASCADE',
           'CASCADE'
@@ -34,6 +34,6 @@ class m230712_100434_create_image_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%image}}');
+        $this->dropTable('{{%images}}');
     }
 }
