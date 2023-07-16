@@ -10,6 +10,17 @@ use yii\grid\GridView;
 /** @var app\models\ProductSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
+$this->registerJsFile('@web/js/columns.js');
+
+if(isset($_COOKIE['check-sku'])) {
+  $skuChecked = $_COOKIE['check-sku'] === 'true'
+    ? true 
+    : false;
+}
+else {
+  $skuChecked = true;
+}
+
 $this->title = 'Products';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -23,6 +34,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
+    <div class="form-check" id="checkColumns">
+      <input class="form-check-input" type="checkbox" value="" id="checkSku" <?= $skuChecked ? 'checked' : '' ?> >
+      <label class="form-check-label" for="checkSku">
+        SKU
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="checkName" checked>
+      <label class="form-check-label" for="checkName">
+        Название
+      </label>
+    </div>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -30,9 +54,15 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'sku',
+            [
+              'attribute' => 'sku',
+              'visible' => $skuChecked,
+            ],
             'name',
-            'quantity',
+            [
+              'attribute' => 'quantity',
+              'visible' => true,
+            ],
             [
               'attribute' => 'type.name',
               'label' => 'Тип',
