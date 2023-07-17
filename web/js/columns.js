@@ -1,11 +1,15 @@
-const checkColumns = document.getElementById("checkColumns");
+const checkColumns = document.getElementById("check-columns");
 
-// if (!checkColumns) {
-//   return;
-// }
+// ['sku', 'name', 'quantity'].forEach(name => {
+//   const elId = `check-${name}`;
+//   const checkEl = checkColumns.querySelector(`#${elId}`);
+//   checkEl.onchange = function () {
+//     document.cookie = `${elId}=${this.checked}; path=/; samesite=lax;`;
+//     location.reload(true);
+//   };
+// })
 
-const checkSku = checkColumns.querySelector("#checkSku");
-checkSku.onchange = function () {
-  document.cookie = `check-sku=${this.checked}; path=/; samesite=lax;`;
+checkColumns.onchange = (e) => {
+  document.cookie = `${e.target.id}=${e.target.checked}; path=/; samesite=lax;`;
   location.reload(true);
 };

@@ -6,20 +6,22 @@ use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
+use app\util\ProductColumn;
+
 /** @var yii\web\View $this */
 /** @var app\models\ProductSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->registerJsFile('@web/js/columns.js');
 
-if(isset($_COOKIE['check-sku'])) {
-  $skuChecked = $_COOKIE['check-sku'] === 'true'
-    ? true 
-    : false;
-}
-else {
-  $skuChecked = true;
-}
+ProductColumn::seedProductColumns([
+  ['sku', 'SKU'],
+  ['name', 'Название'],
+  ['quantity', 'Кол-во'],
+  ['type', 'Тип'],
+]);
+
+$columns = ProductColumn::$columns;
 
 $this->title = 'Products';
 $this->params['breadcrumbs'][] = $this->title;
@@ -34,18 +36,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <div class="form-check" id="checkColumns">
-      <input class="form-check-input" type="checkbox" value="" id="checkSku" <?= $skuChecked ? 'checked' : '' ?> >
-      <label class="form-check-label" for="checkSku">
-        SKU
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="checkName" checked>
-      <label class="form-check-label" for="checkName">
-        Название
-      </label>
-    </div>
+    <?php
+      echo "<div id='check-columns'>";
+      foreach($columns as $column) {
+        $checked = $column->visible ? 'checked' : '';
+
+        echo "<div class='form-check'>";
+        echo  "<input class='form-check-input' type='checkbox' value='' id='check-{$column->name}' $checked >";
+        echo  "<label class='form-check-label' for='check-{$column->name}'>";
+        echo $column->label;
+        echo "</label>";
+        echo "</div>";
+      }
+      echo "</div>";
+    ?>
+
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -55,13 +60,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             [
-              'attribute' => 'sku',
-              'visible' => $skuChecked,
+              'attribute' => $columns[0]->name,
+              'visible' => $columns[0]->visible,
+              'label' => $columns[0]->label,
             ],
-            'name',
             [
-              'attribute' => 'quantity',
-              'visible' => true,
+              'attribute' => $columns[1]->name,
+              'visible' => $columns[1]->visible,
+              'label' => $columns[1]->label,
+            ],
+            [
+              'attribute' => $columns[2]->name,
+              'visible' => $columns[2]->visible,
+              'label' => $columns[2]->label,
             ],
             [
               'attribute' => 'type.name',
